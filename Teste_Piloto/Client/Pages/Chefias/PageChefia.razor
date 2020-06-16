@@ -1,0 +1,29 @@
+﻿<br>
+<EditForm Model="@Chefia" OnInvalidSubmit="@OnValidSubmit">
+    <div class="form-group">
+        <label>Nome</label>
+        <InputText @bind-Value="@Chefia.NomeChefia"></InputText>
+    </div>
+    <div class="form-group">
+        <label>Setor</label>
+        <InputText @bind-Value="@Chefia.Setor"></InputText>
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <InputText @bind-Value="@Chefia.Email"></InputText>
+    </div>
+    <div class="form-group">
+        <label>Telefone</label>
+        <InputText @bind-Value="@Chefia.Telefone"></InputText>
+    </div>
+    <button type="submit" class="btn btn-primary" @onclick="OnValidSubmit">@ButtonText</button>
+
+</EditForm>
+
+
+@code
+{
+    [Parameter] public Chefia Chefia { get; set; }
+    [Parameter] public string ButtonText { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

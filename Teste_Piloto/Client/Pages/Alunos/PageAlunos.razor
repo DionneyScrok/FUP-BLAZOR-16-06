@@ -1,0 +1,95 @@
+﻿@inject HttpClient http
+<br>
+<EditForm Model="@Aluno" OnInvalidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator/>
+    <div class="form-group">
+        <label>Nome</label>
+        <InputText @bind-Value="@Aluno.Nome"></InputText>
+        <ValidationMessage For="@(() =>Aluno.Nome)"></ValidationMessage>
+    </div>
+    <div class="form-group">
+        <label>RG</label>
+        <InputText @bind-Value="@Aluno.Rg"></InputText>
+        <ValidationMessage For="@(() =>Aluno.Rg)"></ValidationMessage>
+    </div>
+    <div class="form-group">
+        <label>CPF</label>
+        <InputText @bind-Value="@Aluno.Cpf"></InputText>
+        <ValidationMessage For="@(() =>Aluno.Cpf)"></ValidationMessage>
+    </div>
+    <div class="form-group">
+        <label>Data Nascimento</label>
+        <InputDate @bind-Value="@Aluno.Datanascimento"></InputDate>
+    </div>
+    <div class="form-group">
+        <label>Gênero</label>
+        <InputText @bind-Value="@Aluno.Genero"></InputText>
+        <ValidationMessage For="@(() =>Aluno.Genero)"></ValidationMessage>
+    </div>
+    <div class="form-group">
+        <label>Data Inicio Curso</label>
+        <InputDate @bind-Value="@Aluno.DataInicioCurso"></InputDate>
+    </div>
+    <div class="form-group">
+        <label>Data Termino Curso</label>
+        <InputDate @bind-Value="@Aluno.DataTerminoCurso"></InputDate>
+    </div>
+
+    <div class="form-group">
+        <label>Email</label>
+        <InputText @bind-Value="@Aluno.Email"></InputText>
+        <ValidationMessage For="@(() =>Aluno.Email)"></ValidationMessage>
+    </div>
+    <div class="form-group">
+        <label>Telefone</label>
+        <InputText @bind-Value="@Aluno.Telefone"></InputText>
+        <ValidationMessage For="@(() =>Aluno.Telefone)"></ValidationMessage>
+    </div>
+    @*<div class="form-group">
+        <label>Curso</label>
+        <InputNumber @bind-Value="@Aluno.CursosId"></InputNumber>
+    </div>*@
+    <div class="form-group">
+        <label>Curso</label>
+        @*<CustomInputSelect @bind-Value="@Aluno.AlunoId" class="form-control">
+            @if (cursos != null)
+            {
+                <option>SELECT...</option>
+                @foreach (var curso in cursos)
+                {
+                    <option value="@curso.Id_Curso">@curso.NomeCurso</option>
+                }
+            }
+        </CustomInputSelect>*@
+        <InputSelect @bind-Value="@Aluno.NomeCurso" class="form-control">
+                @if (cursos != null)
+                {
+                <option value="">Selecione um curso</option>
+                    @foreach (var curso in cursos)
+                    {
+                        <option value="@curso.NomeCurso">@curso.NomeCurso</option>
+                    }
+                }
+            </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary" @onclick="OnValidSubmit">@ButtonText</button>
+
+</EditForm>
+
+
+@code
+{
+    public List<Curso> cursos { get; set; }
+    [Parameter] public Aluno Aluno { get; set; }
+    [Parameter] public string ButtonText { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCursos();
+    }
+    async Task LoadCursos()
+    {
+        cursos = await http.GetFromJsonAsync<List<Curso>>("api/cursos");
+    }
+}

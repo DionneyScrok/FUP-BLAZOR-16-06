@@ -1,0 +1,43 @@
+﻿
+    <EditForm Model="@Aluno" OnInvalidSubmit="@OnValidSubmit">
+        <div class="form-group">
+            <h3> <strong>Nome do Aluno: </strong> @Aluno.Nome </h3>
+        </div>
+        <div class="form-group">
+            <h3> <strong> RG: </strong> @Aluno.Rg </h3>
+        </div>
+        <div class="form-group">
+            <h3> <strong> CPF: </strong> @Aluno.Cpf </h3>
+        </div>
+        <div class="form-group">
+            <h3> <strong> Data Nascimento: </strong> @Aluno.Datanascimento </h3>
+        </div>
+        <div class="form-group">
+            <h3> <strong> Data Inicio Curso: </strong> @Aluno.DataInicioCurso </h3>
+        </div>
+        <div class="form-group">
+            <h3> <strong> Data Término Curso: </strong> @Aluno.DataTerminoCurso </h3>
+        </div>
+        <div class="form-group">
+            <h3> <strong> Gênero: </strong> @Aluno.Genero </h3>
+        </div>
+        <div class="form-group">
+            <h3> <strong> Email: </strong> @Aluno.Email </h3>
+        </div>
+        <div class="form-group">
+            <h3> <strong> Telefone: </strong> @Aluno.Telefone </h3>
+        </div>
+        @*<div class="form-group">
+            <h3> <strong> Nome Curso: </strong> @Aluno. </h3>
+        </div>*@
+        <button type="submit" class="btn btn-primary" @onclick="OnValidSubmit">@ButtonText</button>
+
+    </EditForm>
+
+
+@code
+{
+    [Parameter] public Aluno Aluno { get; set; }
+    [Parameter] public string ButtonText { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

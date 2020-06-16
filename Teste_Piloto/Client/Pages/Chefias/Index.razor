@@ -1,0 +1,76 @@
+﻿@page "/Chefias"
+@using Faculdade_FUP_Project.Server.Models
+@inject HttpClient http
+
+
+@if (chefias == null)
+{
+    <text>Carregando!!!</text>
+}
+
+else if (chefias.Count == 0)
+{
+    <h3>Nenhum chefe cadastrado.   </h3>
+                    <div>
+                        <a href="chefias/criar" class="btn btn-sucess" value="Criar">Criar</a>
+                    </div>
+}
+else
+{
+<div>
+    <a href="chefias/criar" class="btn btn-sucess" value="Criar">Criar</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            
+            <th>Nome</th>
+            <th>Setor</th>
+            
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var chefia in chefias)
+        {
+            <tr>
+              
+                <td>@chefia.NomeChefia</td>
+                <td>@chefia.Setor</td>
+                
+                
+                <td>
+                    <a class="btn btn-sucess" href="chefias/edit/@chefia.ChefiaId">Editar</a>
+                </td>
+                <td>
+                    <a class="btn btn-sucess" href="chefias/details/@chefia.ChefiaId">Detalhes</a>
+                </td>
+                <td>
+                    <button class="=" btn btn-danger @onclick="@(() => ExcluirChefe(chefia.ChefiaId))"> Delete </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+}
+
+
+
+@code {
+    public List<Chefia> chefias;
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadChefias();
+    }
+    async Task LoadChefias()
+    {
+        chefias = await http.GetFromJsonAsync<List<Chefia>>("api/chefias");
+    }
+    async Task ExcluirChefe(int id)
+    {
+        await http.DeleteAsync($"api/chefias/{id}");
+        await LoadChefias();
+    }
+}

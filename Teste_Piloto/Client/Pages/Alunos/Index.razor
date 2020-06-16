@@ -1,0 +1,69 @@
+﻿@page "/Alunos"
+@using Faculdade_FUP_Project.Server.Models
+@inject HttpClient http
+
+@if (alunos == null)
+{
+    <text>Carregando!!!</text>
+}
+else if (alunos.Count == 0)
+{
+    <div>
+        <a href="alunos/criar" class="btn btn-sucess" value="Criar">Criar</a>
+    </div>
+}
+else
+{
+    <div>
+        <a href="alunos/criar" class="btn btn-sucess" value="Criar">Criar</a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>Nome</th>
+                <th>Genero</th>
+                <th>Data Inicio Curso</th>
+                <th>Nome Curso</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var aluno in alunos)
+            {
+                <tr>
+
+                    <td>@aluno.Nome</td>
+                    <td>@aluno.Genero</td>
+                    <td>@aluno.DataInicioCurso</td>
+                    <td>@aluno.NomeCurso</td>
+                    <td>
+                        <a class="btn btn-sucess" href="#">Deletar</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-sucess" href="alunos/edit/@aluno.AlunoId">Editar</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-sucess" href="alunos/details/@aluno.AlunoId">Detalhes</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+
+@code {
+    public List<Aluno> alunos;
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAlunos();
+    }
+    async Task LoadAlunos()
+    {
+        alunos = await http.GetFromJsonAsync<List<Aluno>>("api/alunos");
+    }
+}

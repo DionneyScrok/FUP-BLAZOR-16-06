@@ -1,0 +1,74 @@
+﻿@page "/Cursos"
+@using Faculdade_FUP_Project.Server.Models
+@inject HttpClient http
+
+@if (cursos == null)
+{
+    <text>Carregando!!!</text>
+}
+else if (cursos.Count == 0)
+{
+    <h3>Nenhum curso cadastrado!   </h3>
+    <div>
+        <a href="cursos/criar" class="btn btn-sucess" value="Criar">Criar</a>
+    </div>
+}
+
+else
+{
+    <div>
+        <a href="cursos/criar" class="btn btn-sucess" value="Criar">Criar</a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+              
+                <th>NomeCurso</th>
+                <th>Professor</th>
+                <th>ValorCurso</th>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var curso in cursos)
+            {
+                <tr>
+                   
+                    <td>@curso.NomeCurso</td>
+                    <td>@curso.ProfessorCurso</td>
+                    <td>@curso.ValorCurso</td>
+                    <td>
+                        <a class="btn btn-sucess" href="cursos/edit/@curso.Id_Curso">Editar</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-sucess" href="cursos/details/@curso.Id_Curso">Detalhes</a>
+                    </td>
+                    <td>
+                        <button class="=" btn btn-danger @onclick="@(() => ExcluirCurso(curso.Id_Curso))"> Delete </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+
+@code {
+    public List<Curso> cursos;
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCursos();
+    }
+    async Task LoadCursos()
+    {
+        cursos = await http.GetFromJsonAsync<List<Curso>>("api/cursos");
+    }
+    async Task ExcluirCurso(int id)
+    {
+        await http.DeleteAsync($"api/cursos/{id}");
+        await LoadCursos();
+    }
+}

@@ -1,0 +1,78 @@
+﻿@page "/Funcionarios"
+@using Faculdade_FUP_Project.Server.Models
+@inject HttpClient http
+
+@if (funcionarios == null)
+{
+    <text>Carregando!!!</text>
+}
+else if (funcionarios.Count == 0)
+{
+    <h3>Ninguem cadastrado.   </h3>
+    <div>
+        <a href="funcionarios/criar" class="btn btn-sucess" value="Criar">Criar</a>
+    </div>
+}
+else
+{
+    <div>
+        <a href="funcionarios/criar" class="btn btn-sucess" value="Criar">Criar</a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>                
+                <th>Nome</th>               
+                <th>Data Nascimento</th>
+                <th>Data Contratação</th>               
+                <th>Genero</th>
+                <th>Salario</th>              
+                <th>Nome Chefe</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var funcionario in funcionarios)
+            {
+                <tr>              
+                    <td>@funcionario.NomeFuncionario</td>               
+                    <td>@funcionario.Datanascimento</td>
+                    <td>@funcionario.DataContratacao</td>                   
+                    <td>@funcionario.Genero</td>
+                    <td>@funcionario.SalarioFuncionario</td>                  
+                    <td>@funcionario.NomeChefe</td>
+
+                    <td>
+                        <a class="btn btn-sucess" href="funcionarios/edit/@funcionario.FuncionarioId">Editar</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-sucess" href="funcionarios/details/@funcionario.FuncionarioId">Detalhes</a>
+                    </td>
+                    <td>
+                        <button class="=" btn btn-danger @onclick="@(() => ExcluirFuncionario(funcionario.FuncionarioId))"> Delete </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+
+@code {
+    public List<Funcionario> funcionarios;
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadFuncionarios();
+    }
+    async Task LoadFuncionarios()
+    {
+        funcionarios = await http.GetFromJsonAsync<List<Funcionario>>("api/funcionarios");
+    }
+    async Task ExcluirFuncionario(int id)
+    {
+        await http.DeleteAsync($"api/funcionarios/{id}");
+        await LoadFuncionarios();
+    }
+}

@@ -1,0 +1,20 @@
+﻿<br>
+<EditForm Model="@financeiro" OnInvalidSubmit="@OnValidSubmit">
+    <div class="form-group">
+        <label>Entrada</label>
+        <InputNumber @bind-Value="@financeiro.Entrada"></InputNumber>
+    </div>
+    <div class="form-group">
+        <label>Saída</label>
+        <InputNumber @bind-Value="@financeiro.Saida"></InputNumber>
+    </div>
+    <button type="submit" class="btn btn-primary" @onclick="OnValidSubmit">@ButtonText</button>
+
+</EditForm>
+
+
+@code
+{ [Parameter] public Financeiro financeiro { get; set; }
+  [Parameter] public string ButtonText { get; set; }
+  [Parameter] public EventCallback OnValidSubmit { get; set; } 
+}
